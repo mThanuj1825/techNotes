@@ -1,6 +1,4 @@
-// import express
 const express = require("express");
-// import path
 const path = require("path");
 
 // create a Router instance to route user to various pages and apis

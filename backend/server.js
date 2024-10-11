@@ -1,7 +1,10 @@
-// import express 
 const express = require("express");
-// import path
 const path = require("path");
+const { logger } = require("./middleware/logger");
+const errorHandler = require("./middleware/errorHandler");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const corsOptions = require("./config/corsOptions");
 
 // create an object for express
 const app = express();
@@ -9,8 +12,17 @@ const app = express();
 // // process.env is used to access the environment variables
 const PORT = process.env.PORT || 3000;
 
+// lets our app use the logger middleware we created
+app.use(logger);
+
 // lets our app recieve, process and send json
 app.use(express.json());
+
+// lets our app recieve, process and send cookies
+app.use(cookieParser());
+
+// lets our app recieve, process requests for anyone or the people we say okay
+app.use(cors(corsOptions));
 
 // declares where to look for the static files on our backend using a middleware called express.static
 // // files like, css, html etc.
@@ -36,6 +48,9 @@ app.all("*", (req, res) => {
 		res.type("txt").send("404 Not Found");
 	}
 });
+
+// lets our app use the errorHandler middleware we created
+app.use(errorHandler);
 
 // starts listening for requests from everywhere
 app.listen(PORT, () => {
