@@ -11,14 +11,14 @@ const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
 
-// creates the database connection
-connectDB();
-
-console.log(process.env.NODE_ENV);
-
 // create a PORT for the server to run on
 // // process.env is used to access the environment variables
 const PORT = process.env.PORT || 3000;
+
+console.log(process.env.NODE_ENV);
+
+// creates the database connection
+connectDB();
 
 // lets our app use the logger middleware we created
 app.use(logger);
@@ -38,6 +38,11 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 // root routes
 app.use("/", require("./routes/root"));
+
+// user routes
+app.use("/users", require("./routes/userRoutes"));
+// note routes
+app.use("/notes", require("./routes/noteRoutes"));
 
 // handle all the requests that are invalid or not being handled in the above part of the code
 app.all("*", (req, res) => {
